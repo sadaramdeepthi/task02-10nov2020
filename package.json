@@ -2,19 +2,36 @@
   "name": "task2-10nov2020",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
+  "main": "src/index.js",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.6",
     "@testing-library/react": "^11.2.2",
     "@testing-library/user-event": "^12.5.0",
+    "@wojtekmaj/enzyme-adapter-react-17": "^0.3.2",
+    "jest": "^26.6.3",
+    "lodash": "^4.17.20",
+    "lucid-ui": "^5.8.23",
+    "node-sass": "^4.14.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
+    "react-test-renderer": "^17.0.1",
+    "sass-loader": "^10.1.0",
     "web-vitals": "^0.2.4"
+  },
+  "jest": {
+    "rootDir": "src",
+    "moduleNameMapper": {
+      "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js"
+    }
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
+    "watch": "jest --watch",
+    "cover": "jest --coverage",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
