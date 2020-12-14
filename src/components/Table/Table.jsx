@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { DataTable, Paginator } from "lucid-ui";
+import { DataTable } from "lucid-ui";
 import _ from "lodash";
 import "../../style/Table.scss";
 import Pagination from "./Pagination";
@@ -62,7 +62,9 @@ const Table = () => {
   return (
     <div className="datatable-wrapper">
       {loading ? (
-        <span>Please Hold on, fetching data may take some time...</span>
+        <span className="noData-wrapper">
+          Please Hold on, fetching data may take some time...
+        </span>
       ) : (
         <DataTable
           data={_.map(currentUsers, (row, index) =>
@@ -121,7 +123,6 @@ const Table = () => {
             width={100}
             hasBorderLeft
             hasBorderRight
-            isSortable
           >
             Status
           </DataTable.Column>
