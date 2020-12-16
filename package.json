@@ -6,24 +6,34 @@
   "main": "src/index.js",
   "dependencies": {
     "@testing-library/react": "^11.2.2",
+    "@testing-library/react-hooks": "^3.7.0",
     "@testing-library/user-event": "^12.5.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.3.2",
+    "fetch-mock": "^9.11.0",
     "jest": "^26.6.3",
+    "jest-fetch-mock": "^3.0.3",
     "lodash": "^4.17.20",
     "lucid-ui": "^5.8.23",
+    "msw": "^0.24.2",
+    "node-fetch": "^2.6.1",
     "node-sass": "^4.14.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-scripts": "4.0.1",
     "react-test-renderer": "^17.0.1",
+    "request": "^2.88.2",
     "sass-loader": "^10.1.0",
-    "web-vitals": "^0.2.4"
+    "web-vitals": "^0.2.4",
+    "whatwg-fetch": "^3.5.0"
   },
   "jest": {
     "rootDir": "src",
     "moduleNameMapper": {
       "\\.(css|scss)$": "<rootDir>/__mocks__/styleMock.js"
-    }
+    },
+    "setupFilesAfterEnv": [
+      "jest-sorted"
+    ]
   },
   "scripts": {
     "start": "react-scripts start",
@@ -56,6 +66,7 @@
     "@testing-library/jest-dom": "^5.11.6",
     "babel-jest": "^26.6.3",
     "enzyme": "^3.11.0",
-    "jest-sonar-reporter": "^2.0.0"
+    "jest-sonar-reporter": "^2.0.0",
+    "jest-sorted": "^1.0.8"
   }
 }
