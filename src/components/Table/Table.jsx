@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import { DataTable } from "lucid-ui";
 import _ from "lodash";
 import "../../style/Table.scss";
@@ -10,8 +10,9 @@ import {
   handleRowClick,
   paginate,
 } from "../../actions/fetchDataAction";
+import DialogBox from "./DialogBox";
 
-const Table = () => {
+const Table = (props) => {
   const jsonColumn = [
     { col: "id", width: "150" },
     { col: "name", width: "100" },
@@ -19,37 +20,33 @@ const Table = () => {
     { col: "gender", width: "100" },
     { col: "status", width: "150" },
   ];
-  const users = useSelector((state) => state.userData.users);
-  const loading = useSelector((state) => state.userData.loading);
-  const activeIndex = useSelector((state) => state.userData.activeIndex);
-  const usersPerPage = useSelector((state) => state.userData.usersPerPage);
-  const currentPage = useSelector((state) => state.userData.currentPage);
-  const dispatch = useDispatch();
 
   //Fetching data from API
   useEffect(async () => {
-    await dispatch(fetchUsersData());
+    await props.fetchUsersData();
   }, []);
 
-  const indexOfLastUser = currentPage * usersPerPage;
-  const indexOfFirstUser = indexOfLastUser - usersPerPage;
-  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
-
+  const indexOfLastUser = props.currentPage * props.usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - props.usersPerPage;
+  const currentUsers = props.users.slice(indexOfFirstUser, indexOfLastUser);
+  const { loading, error } = props;
   return (
     <div className="datatable-wrapper">
-      {loading ? (
+      {loading && (
         <span className="noData-wrapper">
           Please Hold on, fetching data may take some time...
         </span>
-      ) : (
+      )}
+      {!loading && error && <DialogBox />}
+      {!props.loading && !props.error && (
         <DataTable
           data={_.map(currentUsers, (row, index) =>
-            index === activeIndex ? { ...row, isActive: true } : row
+            index === props.activeIndex ? { ...row, isActive: true } : row
           )}
           isActionable
           density="extended"
-          onRowClick={(rowIndex) => dispatch(handleRowClick(rowIndex))}
-          onSort={(field) => dispatch(handleSorting(field))}
+          onRowClick={(rowIndex) => props.handleRowClick(rowIndex)}
+          onSort={(field) => props.handleSorting(field)}
         >
           {_.map(jsonColumn, (row, i) => {
             return (
@@ -69,16 +66,29 @@ const Table = () => {
           })}
         </DataTable>
       )}
-
       <div>
         <Pagination
-          usersPerPage={usersPerPage}
-          totalUsers={users.length}
-          paginate={(pageNumber) => dispatch(paginate(pageNumber))}
+          usersPerPage={props.usersPerPage}
+          totalUsers={props.users.length}
+          paginate={(pageNumber) => props.paginate(pageNumber)}
         />
       </div>
     </div>
   );
 };
 
-export default Table;
+const mapStateToProps = (state) => ({
+  users: state.userData.users,
+  loading: state.userData.loading,
+  activeIndex: state.userData.activeIndex,
+  usersPerPage: state.userData.usersPerPage,
+  currentPage: state.userData.currentPage,
+  error: state.error.error,
+});
+
+export default connect(mapStateToProps, {
+  fetchUsersData,
+  handleSorting,
+  handleRowClick,
+  paginate,
+})(Table);

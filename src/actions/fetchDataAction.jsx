@@ -5,6 +5,7 @@ import {
   HANDLE_PAGINATION,
 } from "./types";
 import FetchDataApi from "../utils/FetchDataApi";
+import { handleErrorShow } from "./errorActions";
 
 // fetch users data from API
 export const fetchUsersData = () => async (dispatch) => {
@@ -14,35 +15,32 @@ export const fetchUsersData = () => async (dispatch) => {
       type: FETCH_DATA,
       payload: data,
     });
-  } catch (err) {}
+  } catch (err) {
+    dispatch(handleErrorShow(err));
+    throw err;
+  }
 };
 
 //Handle Sorting
 export const handleSorting = (field) => async (dispatch) => {
-  try {
-    dispatch({
-      type: HANDLE_SORT,
-      payload: field,
-    });
-  } catch (err) {}
+  dispatch({
+    type: HANDLE_SORT,
+    payload: field,
+  });
 };
 
 //Handle row clicking
 export const handleRowClick = (rowIndex) => async (dispatch) => {
-  try {
-    dispatch({
-      type: HANDLE_ROWCLICK,
-      payload: rowIndex,
-    });
-  } catch (err) {}
+  dispatch({
+    type: HANDLE_ROWCLICK,
+    payload: rowIndex,
+  });
 };
 
 //pagination
 export const paginate = (pageNumber) => async (dispatch) => {
-  try {
-    dispatch({
-      type: HANDLE_PAGINATION,
-      payload: pageNumber,
-    });
-  } catch (err) {}
+  dispatch({
+    type: HANDLE_PAGINATION,
+    payload: pageNumber,
+  });
 };
