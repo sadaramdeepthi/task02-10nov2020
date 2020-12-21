@@ -1,0 +1,4 @@
+export const FETCH_DATA = "FETCH_DATA";
+export const HANDLE_SORT = "HANDLE_SORT";
+export const HANDLE_ROWCLICK = "HANDLE_ROWCLICK";
+export const HANDLE_PAGINATION = "HANDLE_PAGINATION";

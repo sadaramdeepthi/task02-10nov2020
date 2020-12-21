@@ -1,6 +1,6 @@
 import { mount, configure } from "enzyme";
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
-import React, { useState as useStateMock } from "react";
+import React from "react";
 import Table from "./Table";
 import Pagination from "./Pagination";
 import FetchDataApi from "../../utils/FetchDataApi";

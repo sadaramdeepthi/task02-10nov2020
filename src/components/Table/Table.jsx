@@ -1,12 +1,17 @@
 import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { DataTable } from "lucid-ui";
 import _ from "lodash";
 import "../../style/Table.scss";
 import Pagination from "./Pagination";
-import FetchDataApi from "../../utils/FetchDataApi";
+import {
+  fetchUsersData,
+  handleSorting,
+  handleRowClick,
+  paginate,
+} from "../../actions/fetchDataAction";
 
 const Table = () => {
-  const [users, setUsers] = useState([]);
   const jsonColumn = [
     { col: "id", width: "150" },
     { col: "name", width: "100" },
@@ -14,59 +19,21 @@ const Table = () => {
     { col: "gender", width: "100" },
     { col: "status", width: "150" },
   ];
-  const [loading, setLoading] = useState(true);
-  const [activeIndex, setActiveIndex] = useState(1);
-  const [currentlySortedField, setCurrentlySortedField] = useState("id");
-  const [
-    currentlySortedFieldDirection,
-    setCurrentlySortedFieldDirection,
-  ] = useState("desc");
-  const [currentPage, setCurrentPage] = useState(1);
-  const [usersPerPage, setUsersPerPage] = useState(10);
+  const users = useSelector((state) => state.userData.users);
+  const loading = useSelector((state) => state.userData.loading);
+  const activeIndex = useSelector((state) => state.userData.activeIndex);
+  const usersPerPage = useSelector((state) => state.userData.usersPerPage);
+  const currentPage = useSelector((state) => state.userData.currentPage);
+  const dispatch = useDispatch();
 
-  // Fetching data from API
+  //Fetching data from API
   useEffect(async () => {
-    const fetchData = await FetchDataApi();
-    if (fetchData) {
-      setLoading(false);
-      setUsers(fetchData);
-    } else {
-      setLoading(true);
-    }
-    // fetchData ? setUsers(fetchData) : setLoading(true);
-  }, [setUsers, setLoading]);
+    await dispatch(fetchUsersData());
+  }, []);
 
-  const handleRowClick = (item, rowIndex) => {
-    setActiveIndex(rowIndex);
-  };
-
-  // Handling sorting.
-  const handleSorting = (field) => {
-    const nextCurrentlySortedFieldDirection =
-      currentlySortedField === field && currentlySortedFieldDirection === "asc"
-        ? "desc"
-        : "asc";
-    const nextData = _.sortBy(users, field);
-
-    setCurrentlySortedField(field);
-    setCurrentlySortedFieldDirection(nextCurrentlySortedFieldDirection);
-    setUsers(
-      nextCurrentlySortedFieldDirection === "desc"
-        ? nextData
-        : _.reverse(nextData)
-    );
-    setActiveIndex(null);
-  };
-
-  //Getting current users
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
-
-  // Changing the page
-  const paginate = (pageNumber) => {
-    setCurrentPage(pageNumber + 1);
-  };
 
   return (
     <div className="datatable-wrapper">
@@ -81,8 +48,8 @@ const Table = () => {
           )}
           isActionable
           density="extended"
-          onRowClick={handleRowClick}
-          onSort={handleSorting}
+          onRowClick={(rowIndex) => dispatch(handleRowClick(rowIndex))}
+          onSort={(field) => dispatch(handleSorting(field))}
         >
           {_.map(jsonColumn, (row, i) => {
             return (
@@ -107,7 +74,7 @@ const Table = () => {
         <Pagination
           usersPerPage={usersPerPage}
           totalUsers={users.length}
-          paginate={paginate}
+          paginate={(pageNumber) => dispatch(paginate(pageNumber))}
         />
       </div>
     </div>

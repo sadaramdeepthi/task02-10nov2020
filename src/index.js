@@ -3,11 +3,13 @@ import ReactDOM from "react-dom";
 import App from "./App";
 import "../node_modules/lucid-ui/dist/lucid.css";
 import reportWebVitals from "./reportWebVitals";
+import configureStore from "./store";
+import { Provider } from "react-redux";
 
 ReactDOM.render(
-  <React.StrictMode>
+  <Provider store={configureStore()}>
     <App />
-  </React.StrictMode>,
+  </Provider>,
   document.getElementById("root")
 );
 
