@@ -12,7 +12,18 @@ import {
 } from "../../actions/fetchDataAction";
 import DialogBox from "./DialogBox";
 
-const Table = (props) => {
+const Table = ({
+  fetchUsersData,
+  handleSorting,
+  handleRowClick,
+  paginate,
+  loading,
+  error,
+  currentPage,
+  usersPerPage,
+  users,
+  activeIndex,
+}) => {
   const jsonColumn = [
     { col: "id", width: "150" },
     { col: "name", width: "100" },
@@ -23,30 +34,31 @@ const Table = (props) => {
 
   //Fetching data from API
   useEffect(async () => {
-    await props.fetchUsersData();
+    await fetchUsersData();
   }, []);
 
-  const indexOfLastUser = props.currentPage * props.usersPerPage;
-  const indexOfFirstUser = indexOfLastUser - props.usersPerPage;
-  const currentUsers = props.users.slice(indexOfFirstUser, indexOfLastUser);
-  const { loading, error } = props;
+  const indexOfLastUser = currentPage * usersPerPage;
+  const indexOfFirstUser = indexOfLastUser - usersPerPage;
+  const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+
   return (
     <div className="datatable-wrapper">
+      {!loading && error && <DialogBox />}
       {loading && (
         <span className="noData-wrapper">
           Please Hold on, fetching data may take some time...
         </span>
       )}
-      {!loading && error && <DialogBox />}
-      {!props.loading && !props.error && (
+
+      {!loading && !error && (
         <DataTable
           data={_.map(currentUsers, (row, index) =>
-            index === props.activeIndex ? { ...row, isActive: true } : row
+            index === activeIndex ? { ...row, isActive: true } : row
           )}
           isActionable
           density="extended"
-          onRowClick={(rowIndex) => props.handleRowClick(rowIndex)}
-          onSort={(field) => props.handleSorting(field)}
+          onRowClick={(rowIndex) => handleRowClick(rowIndex)}
+          onSort={(field) => handleSorting(field)}
         >
           {_.map(jsonColumn, (row, i) => {
             return (
@@ -68,9 +80,9 @@ const Table = (props) => {
       )}
       <div>
         <Pagination
-          usersPerPage={props.usersPerPage}
-          totalUsers={props.users.length}
-          paginate={(pageNumber) => props.paginate(pageNumber)}
+          usersPerPage={usersPerPage}
+          totalUsers={users.length}
+          paginate={(pageNumber) => paginate(pageNumber)}
         />
       </div>
     </div>
