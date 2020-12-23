@@ -22,25 +22,22 @@ export const fetchUsersData = () => async (dispatch) => {
 };
 
 //Handle Sorting
-export const handleSorting = (field) => async (dispatch) => {
-  dispatch({
-    type: HANDLE_SORT,
-    payload: field,
-  });
-};
+export const handleSorting = (field) => ({
+  type: HANDLE_SORT,
+  payload: field,
+});
 
 //Handle row clicking
-export const handleRowClick = (rowIndex) => async (dispatch) => {
-  dispatch({
-    type: HANDLE_ROWCLICK,
-    payload: rowIndex,
-  });
-};
+export const handleRowClick = (rowIndex) => ({
+  type: HANDLE_ROWCLICK,
+  payload: rowIndex,
+});
 
 //pagination
-export const paginate = (pageNumber) => async (dispatch) => {
-  dispatch({
+export const paginate = (pageNumber) => {
+  console.log("test98");
+  return {
     type: HANDLE_PAGINATION,
     payload: pageNumber,
-  });
+  };
 };

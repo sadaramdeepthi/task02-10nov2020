@@ -1,28 +1,26 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { DataTable } from "lucid-ui";
 import _ from "lodash";
 import "../../style/Table.scss";
-import Pagination from "./Pagination";
 import {
   fetchUsersData,
   handleSorting,
   handleRowClick,
   paginate,
 } from "../../actions/fetchDataAction";
-import DialogBox from "./DialogBox";
+import TableComponent from "./TableComponent";
 
 const Table = ({
   fetchUsersData,
-  handleSorting,
-  handleRowClick,
-  paginate,
-  loading,
-  error,
   currentPage,
   usersPerPage,
   users,
+  loading,
+  error,
   activeIndex,
+  paginate,
+  handleSorting,
+  handleRowClick,
 }) => {
   const jsonColumn = [
     { col: "id", width: "150" },
@@ -40,52 +38,22 @@ const Table = ({
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
   const currentUsers = users.slice(indexOfFirstUser, indexOfLastUser);
+  const usersLength = users.length;
 
   return (
-    <div className="datatable-wrapper">
-      {!loading && error && <DialogBox />}
-      {loading && (
-        <span className="noData-wrapper">
-          Please Hold on, fetching data may take some time...
-        </span>
-      )}
-
-      {!loading && !error && (
-        <DataTable
-          data={_.map(currentUsers, (row, index) =>
-            index === activeIndex ? { ...row, isActive: true } : row
-          )}
-          isActionable
-          density="extended"
-          onRowClick={(rowIndex) => handleRowClick(rowIndex)}
-          onSort={(field) => handleSorting(field)}
-        >
-          {_.map(jsonColumn, (row, i) => {
-            return (
-              <DataTable.Column
-                className="column-wrapper"
-                field={`${row.col}`}
-                align="left"
-                width={`${row.width}`}
-                align="left"
-                hasBorderLeft
-                isSortable
-                key={i}
-              >
-                {_.upperCase(row.col)}
-              </DataTable.Column>
-            );
-          })}
-        </DataTable>
-      )}
-      <div>
-        <Pagination
-          usersPerPage={usersPerPage}
-          totalUsers={users.length}
-          paginate={(pageNumber) => paginate(pageNumber)}
-        />
-      </div>
-    </div>
+    <TableComponent
+      currentUsers={currentUsers}
+      loading={loading}
+      error={error}
+      activeIndex={activeIndex}
+      jsonColumn={jsonColumn}
+      usersPerPage={usersPerPage}
+      users={users}
+      handleRowClick={handleRowClick}
+      handleSorting={handleSorting}
+      paginate={paginate}
+      usersLength={usersLength}
+    />
   );
 };
 

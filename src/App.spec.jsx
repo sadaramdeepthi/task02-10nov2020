@@ -1,43 +1,12 @@
 import { mount, configure } from "enzyme";
 import Adapter from "@wojtekmaj/enzyme-adapter-react-17";
+import App from "./App";
+import _ from "lodash";
+import React from "react";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
-import React from "react";
-import _ from "lodash";
-import Table from "./Table";
-import FetchDataApi from "../../utils/FetchDataApi";
 
 configure({ adapter: new Adapter() });
-
-global.fetch = jest.fn().mockImplementation(() =>
-  Promise.resolve({
-    json: () =>
-      Promise.resolve({
-        data: {
-          data: [
-            {
-              id: 1,
-              name: "Indira Ahuja",
-              email: "indira_ahuja@lueilwitz.org",
-              gender: "Male",
-              status: "Active",
-            },
-            {
-              id: 2,
-              name: "Aadidev Patil",
-              email: "patil_aadidev@kessler-price.co",
-              gender: "Female",
-              status: "Active",
-            },
-          ],
-        },
-      }),
-  })
-);
-
-beforeEach(() => {
-  fetch.mockClear();
-});
 
 describe("Table", () => {
   const setup = () => {
@@ -197,10 +166,9 @@ describe("Table", () => {
     };
     const props = {};
     const store = createStore(_.identity, state);
-
     const wrapper = mount(
       <Provider store={store}>
-        <Table />
+        <App />
       </Provider>
     );
     return {
@@ -209,62 +177,9 @@ describe("Table", () => {
       props,
     };
   };
-
-  it("checking if Table component and Pagination component is loaded.", () => {
+  it("checking if App component is loaded.", () => {
     const { connectedComponent } = setup();
-    const table = connectedComponent.find(".table-wrapper");
-    expect(table.exists()).toBe(true);
-    const component2 = connectedComponent.find("Pagination");
-    expect(component2.exists()).toBe(true);
-  });
-
-  it("Untill data is fetched from api,loading message displays", () => {
-    const { connectedComponent } = setup();
-    const loading = connectedComponent.find("loading");
-    expect(loading.exists()).toBe(true);
-    const noDataWrapper = connectedComponent.find(".noData-wrapper").at(1);
-    expect(noDataWrapper.text()).toBe(
-      "Please Hold on, fetching data may take some time"
-    );
-  });
-
-  it("Checking if loading is false then datatable is displayed.", () => {
-    const { connectedComponent } = setup();
-    const loading = connectedComponent.find("loading");
-    expect(loading.exists()).toBe(false);
-    const table = connectedComponent.find(".datatable-wrapper");
-    expect(table.exists()).toBe(true);
-  });
-
-  it("fetching data from API", () => {
-    const onResponse = jest.fn();
-    const onError = jest.fn();
-
-    return FetchDataApi()
-      .then(onResponse)
-      .catch(onError)
-      .finally(() => {
-        expect(onResponse).toHaveBeenCalled();
-        expect(onError).not.toHaveBeenCalled();
-
-        expect(onResponse.mock.calls[0][0]).toEqual({
-          data: [
-            {
-              id: 1,
-              name: "Indira Ahuja",
-              email: "indira_ahuja@lueilwitz.org",
-              gender: "Male",
-              status: "Active",
-            },
-            {
-              id: 2,
-              name: "Aadidev Patil",
-              email: "patil_aadidev@kessler-price.co",
-              gender: "Female",
-              status: "Active",
-            },
-          ],
-        });
-      });
+    const app = connectedComponent.find(".App");
+    expect(app.exists()).toBe(true);
   });
 });
