@@ -3,8 +3,9 @@ import { DataTable } from "lucid-ui";
 import _ from "lodash";
 import DialogBox from "./DialogBox";
 import Pagination from "./Pagination";
+import PropTypes from "prop-types";
 
-const Table = ({
+const TableComponent = ({
   loading,
   error,
   currentUsers,
@@ -25,7 +26,7 @@ const Table = ({
         </span>
       )}
 
-      {!loading && !error && (
+      {!loading && !error && currentUsers.length && (
         <DataTable
           className="datatable-wrapper"
           data={_.map(currentUsers, (row, index) =>
@@ -65,4 +66,17 @@ const Table = ({
   );
 };
 
-export default Table;
+TableComponent.propTypes = {
+  loading: PropTypes.bool,
+  error: PropTypes.string,
+  currentUsers: PropTypes.array.isRequired,
+  activeIndex: PropTypes.number,
+  jsonColumn: PropTypes.array.isRequired,
+  usersPerPage: PropTypes.number,
+  handleRowClick: PropTypes.func,
+  handleSorting: PropTypes.func,
+  paginate: PropTypes.func,
+  usersLength: PropTypes.number,
+};
+
+export default TableComponent;
