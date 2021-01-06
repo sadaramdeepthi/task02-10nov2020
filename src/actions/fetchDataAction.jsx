@@ -1,24 +1,24 @@
+import FetchDataApi from "../utils/FetchDataApi";
 import {
-  FETCH_DATA,
+  REQUEST_FETCH_DATA,
   HANDLE_SORT,
+  RECEIVE_FETCH_DATA,
   HANDLE_ROWCLICK,
   HANDLE_PAGINATION,
 } from "./types";
-import FetchDataApi from "../utils/FetchDataApi";
-import { handleErrorShow } from "./errorActions";
 
 // fetch users data from API
-export const fetchUsersData = () => async (dispatch) => {
-  try {
-    let data = await FetchDataApi();
-    dispatch({
-      type: FETCH_DATA,
-      payload: data,
-    });
-  } catch (err) {
-    dispatch(handleErrorShow(err));
-    throw err;
-  }
+export const requestFetchUsersData = () => {
+  return {
+    type: REQUEST_FETCH_DATA,
+  };
+};
+
+export const receiveFetchUsersData = (data) => {
+  return {
+    type: RECEIVE_FETCH_DATA,
+    payload: data,
+  };
 };
 
 //Handle Sorting
@@ -35,7 +35,6 @@ export const handleRowClick = (rowIndex) => ({
 
 //pagination
 export const paginate = (pageNumber) => {
-  console.log("test98");
   return {
     type: HANDLE_PAGINATION,
     payload: pageNumber,

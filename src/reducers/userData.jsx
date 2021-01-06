@@ -1,5 +1,5 @@
 import {
-  FETCH_DATA,
+  RECEIVE_FETCH_DATA,
   HANDLE_SORT,
   HANDLE_ROWCLICK,
   HANDLE_PAGINATION,
@@ -18,7 +18,7 @@ let initialState = {
 
 export default (state = initialState, action) => {
   switch (action.type) {
-    case FETCH_DATA:
+    case RECEIVE_FETCH_DATA:
       const users = action.payload;
       return {
         ...state,

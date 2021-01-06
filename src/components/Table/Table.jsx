@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import _ from "lodash";
 import "../../style/Table.scss";
 import {
-  fetchUsersData,
+  requestFetchUsersData,
   handleSorting,
   handleRowClick,
   paginate,
@@ -11,7 +11,7 @@ import {
 import TableComponent from "./TableComponent";
 
 const Table = ({
-  fetchUsersData,
+  requestFetchUsersData,
   currentPage,
   usersPerPage,
   users,
@@ -31,9 +31,10 @@ const Table = ({
   ];
 
   //Fetching data from API
-  useEffect(async () => {
-    await fetchUsersData();
-  }, []);
+  useEffect(() => {
+    const getUsersData = () => requestFetchUsersData();
+    return getUsersData();
+  }, [requestFetchUsersData]);
 
   const indexOfLastUser = currentPage * usersPerPage;
   const indexOfFirstUser = indexOfLastUser - usersPerPage;
@@ -67,7 +68,7 @@ const mapStateToProps = (state) => ({
 });
 
 export default connect(mapStateToProps, {
-  fetchUsersData,
+  requestFetchUsersData,
   handleSorting,
   handleRowClick,
   paginate,
