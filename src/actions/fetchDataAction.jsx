@@ -1,4 +1,3 @@
-import FetchDataApi from "../utils/FetchDataApi";
 import {
   REQUEST_FETCH_DATA,
   HANDLE_SORT,

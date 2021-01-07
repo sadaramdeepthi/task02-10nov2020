@@ -32,8 +32,7 @@ const Table = ({
 
   //Fetching data from API
   useEffect(() => {
-    const getUsersData = () => requestFetchUsersData();
-    return getUsersData();
+    requestFetchUsersData();
   }, [requestFetchUsersData]);
 
   const indexOfLastUser = currentPage * usersPerPage;
